@@ -1,7 +1,7 @@
 #!/bin/bash
 # full_backup.sh
-# does a full backup every day of the minecraft_hardcore server directory
-# 0 4 * * *   (daily at 4:00 AM)
+# does a full backup every day at 4am of the minecraft_hardcore server directory
+# 0 4 * * *
 
 set -e
 
