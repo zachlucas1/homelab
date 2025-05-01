@@ -1,0 +1,25 @@
+
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    container_name: minecraft-hardcore
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      ENABLE_WHITELIST: "TRUE"
+      DIFFICULTY: hard
+      HARDCORE: "true"
+      MODE: survival
+      MAX_PLAYERS: 20
+      MOTD: "NuckChorris Hardcore Minecraft Server"
+      TYPE: "vanilla"   # You can change this to "paper", "spigot", etc., if you want plugins
+      PVP: "false"
+      OPS: "PapiiChulo1"
+      MEMORY: "8G"
+      INIT_MEMORY: "8G"
+      TZ: "America/Denver"
+    volumes:
+      - ./minecraft_hardcore:/data
+    restart: unless-stopped
+
