@@ -1,7 +1,7 @@
 #!/bin/bash
 # full_backup.sh
-# does a full backup every day at 4am of the minecraft_hardcore server directory
-# 0 4 * * *
+# does a full backup every day of the minecraft_hardcore server directory
+# 0 4 * * *   (daily at 4:00 AM)
 
 set -e
 
@@ -29,3 +29,6 @@ echo "World backup complete: $CONTAINER_NAME-$TIMESTAMP.tar.gz"
 # Delete backups older than 7 days
 echo "Deleting backups older than 7 days if they exist"
 find "$BACKUP_DIR" -type f -name "$CONTAINER_NAME-*.tar.gz" -mtime +7 -exec rm -f {} \;
+
+echo "Copying to backblaze"
+rclone copy $BACKUP_DIR/$CONTAINER_NAME-$TIMESTAMP.tar.gz backblaze:paninilab-gameserver-backup
