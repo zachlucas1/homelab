@@ -5,9 +5,10 @@
 
 set -e
 
-CONTAINER_NAME="minecraft-hardcore"
+CONTAINER_NAME="minecraft-hardcore-fabric"
 BACKUP_DIR="/home/zachlucas/games/backups/minecraft/full_backups"
-TIMESTAMP=$(date +"%d-%m-%Y")
+TEMP_COPY="/tmp/minecraft_hardcore_backup"
+TIMESTAMP=$(date +"%m-%d-%Y")
 WORLD_PATH="/home/zachlucas/games/minecraft_hardcore"
 
 echo "--DAILY BACKUP--"
@@ -17,18 +18,24 @@ docker exec "$CONTAINER_NAME" rcon-cli save-off
 docker exec "$CONTAINER_NAME" rcon-cli save-all flush
 sleep 3
 
-# Create backup
-mkdir -p "$BACKUP_DIR"
-tar czf "$BACKUP_DIR/$CONTAINER_NAME-$TIMESTAMP.tar.gz" -C "$WORLD_PATH" .
+# Prepare backup
+rm -rf "$TEMP_COPY"
+cp -r "$WORLD_PATH" "$TEMP_COPY"
 
-# Resume saving
+# Resume saving ASAP
 docker exec "$CONTAINER_NAME" rcon-cli save-on
 
-echo "World backup complete: $CONTAINER_NAME-$TIMESTAMP.tar.gz"
+# Create archive
+mkdir -p "$BACKUP_DIR"
+tar czf "$BACKUP_DIR/$CONTAINER_NAME-$TIMESTAMP.tar.gz" -C "$TEMP_COPY" .
+
+# Cleanup temp copy
+rm -rf "$TEMP_COPY"
 
 # Delete backups older than 7 days
 echo "Deleting backups older than 7 days if they exist"
 find "$BACKUP_DIR" -type f -name "$CONTAINER_NAME-*.tar.gz" -mtime +7 -exec rm -f {} \;
 
+# Sync to Backblaze
 echo "Copying to backblaze"
-rclone copy $BACKUP_DIR/$CONTAINER_NAME-$TIMESTAMP.tar.gz backblaze:paninilab-gameserver-backup
+rclone copy "$BACKUP_DIR/$CONTAINER_NAME-$TIMESTAMP.tar.gz" backblaze:paninilab-gameserver-backup

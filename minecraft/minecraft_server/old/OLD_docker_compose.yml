@@ -1,22 +1,23 @@
 services:
-  minecraft-fabric:
+  minecraft:
     image: itzg/minecraft-server
-    container_name: minecraft-hardcore-fabric
+    container_name: minecraft-hardcore
     ports:
       - "25565:25565"
     environment:
       EULA: "TRUE"
+      ENABLE_WHITELIST: "TRUE"
       DIFFICULTY: hard
+      HARDCORE: "false"
       MODE: survival
       MAX_PLAYERS: 20
-      MOTD: "NuckChorris Always Hard Minecraft Server"
-      TYPE: "FABRIC"
+      MOTD: "NuckChorris Minecraft Server"
+      TYPE: "vanilla"   # You can change this to "paper", "spigot", etc., if you want plugins
       PVP: "false"
       OPS: "PapiiChulo1"
-      MEMORY: "10G"
+      MEMORY: "8G"
+      INIT_MEMORY: "8G"
       TZ: "America/Denver"
-      FABRIC_VERSION: "0.14.16"
     volumes:
       - ./minecraft_hardcore:/data
-      - ./minecraft_hardcore/mods:/data/mods
     restart: unless-stopped
