@@ -14,6 +14,7 @@ services:
       PVP: "false"
       OPS: "PapiiChulo1"
       MEMORY: "10G"
+      JVM_OPTS: "-Xms2G -Xmx10G -XX:+UseG1GC"
       TZ: "America/Denver"
       FABRIC_VERSION: "0.14.16"
     volumes:
