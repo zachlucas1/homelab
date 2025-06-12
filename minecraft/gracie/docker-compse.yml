@@ -1,0 +1,23 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    container_name: minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      ENABLE_WHITELIST: "TRUE"
+      DIFFICULTY: normal
+      SEED: "-7649949940957896961"
+      MAX_PLAYERS: 20
+      VIEW_DISTANCE: "16"
+      SIMULATION_DISTANCE: "16"
+      MOTD: "Welcome to Gracie's Minecraft Server"
+      TYPE: "vanilla"   # You can change this to "paper", "spigot", etc., if you want plugins
+      OPS: "PapiiChulo1,Gracie100hoo"
+      SPAWN_PROTECTION: "0"
+      MEMORY: "10G"
+      TZ: "America/Denver"
+    volumes:
+      - ./minecraft_server:/data
+    restart: unless-stopped
